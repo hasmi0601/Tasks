@@ -2,24 +2,44 @@ package com.example.springboottask.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.persistence.*;
 
 import java.util.List;
 
+/**
+ * This class is to declare the list of (name,value) pairs which consists of the fields and their values.
+ * It includes the getter and setter methods as well
+ *
+ * @author phreddy
+ */
+
+@Entity
 @JsonTypeName("assignmentJobProperties")
-public class AssignmentJobProperties implements JobProperties{
+@DiscriminatorValue("ASSIGNMENT")
+public class AssignmentJobProperties extends JobProperties {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     @JsonProperty("fieldMappings")
-    private List<Store> fieldMappings;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "assignmentJobPropertiesId")
+    private List<FieldMapping> fieldMappings;
 
-//    public AssignmentJobProperties(){}
-//    public AssignmentJobProperties(List<Store> fieldMappings) {
-//        this.fieldMappings = fieldMappings;
-//    }
 
-    public List<Store> getFieldMappings() {
+    /**
+     * This method to get the fieldMappings which is a list of name and value pairs.
+     * @return List(name,value)
+     */
+    public List<FieldMapping> getFieldMappings() {
         return fieldMappings;
     }
 
-    public void setFieldMappings(List<Store> fieldMappings) {
+    /**
+     * This method is to set the new values of fieldMappings
+     * @param fieldMappings new values of the fieldMappings
+     */
+    public void setFieldMappings(List<FieldMapping> fieldMappings) {
         this.fieldMappings = fieldMappings;
     }
 
